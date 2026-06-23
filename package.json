@@ -1,0 +1,72 @@
+{
+  "name": "rest-reminder",
+  "version": "1.0.0",
+  "description": "桌面休息提醒助手 - 定时提醒你休息，保护眼睛和身体",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "test:acceptance": "node tests/acceptance-smoke.js",
+    "test:unit": "node tests/unit-main.js",
+    "test": "node tests/acceptance-smoke.js && node tests/unit-main.js",
+    "lint": "eslint main.js preload.js main/**/*.js js/**/*.js tests/**/*.js",
+    "build": "electron-builder --win nsis",
+    "build:zip": "electron-builder --win zip",
+    "build:dir": "electron-builder --win --dir"
+  },
+  "keywords": [
+    "electron",
+    "rest",
+    "reminder",
+    "pomodoro",
+    "health"
+  ],
+  "author": "vibecode",
+  "license": "MIT",
+  "build": {
+    "appId": "com.vibecode.rest-reminder",
+    "productName": "休息提醒助手",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "main/**/*",
+      "preload.js",
+      "index.html",
+      "floating.html",
+      "floating.css",
+      "styles.css",
+      "js/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "signAndEditExecutable": false,
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "artifactName": "休息提醒助手 Setup.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": false,
+      "createStartMenuShortcut": false,
+      "shortcutName": "休息提醒助手",
+      "runAfterFinish": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^42.3.0",
+    "electron-builder": "^26.8.1",
+    "eslint": "^9.0.0",
+    "jsdom": "^29.1.1"
+  }
+}

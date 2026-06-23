@@ -1,0 +1,127 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 72px;
+  height: 72px;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+}
+.bottle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  --fill: 0%;
+  --fill-top: rgba(136, 192, 208, 0.95);
+  --fill-bottom: rgba(94, 129, 172, 0.9);
+  --rim: rgba(108, 115, 128, 0.4);
+  background: radial-gradient(circle at 35% 24%, rgba(255, 255, 255, 0.18), transparent 20%), linear-gradient(135deg, #3b4252 0%, #2e3440 100%);
+  border: 2px solid var(--rim);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+.bottle:hover {
+  --rim: #88c0d0;
+  box-shadow: 0 0 16px rgba(136, 192, 208, 0.5);
+}
+.bottle.running { --rim: rgba(136, 192, 208, 0.7); --fill-top: rgba(143, 188, 187, 0.98); --fill-bottom: rgba(94, 129, 172, 0.9); }
+.bottle.break { --rim: rgba(163, 190, 140, 0.7); --fill-top: rgba(179, 207, 158, 0.98); --fill-bottom: rgba(163, 190, 140, 0.9); }
+.bottle.paused, .bottle.break-paused { --rim: rgba(208, 135, 112, 0.75); }
+.bottle.idle { --rim: rgba(108, 115, 128, 0.4); --fill-top: rgba(108, 115, 128, 0.4); --fill-bottom: rgba(76, 86, 106, 0.4); }
+.bottle.break-ready { --rim: rgba(163, 190, 140, 0.85); --fill: 100%; --fill-top: rgba(179, 207, 158, 1); --fill-bottom: rgba(0, 166, 132, 0.95); box-shadow: 0 0 18px rgba(163, 190, 140, 0.45); }
+.bottle.snoozed { --rim: rgba(208, 135, 112, 0.75); --fill-top: rgba(223, 175, 143, 0.98); --fill-bottom: rgba(208, 135, 112, 0.9); }
+
+.bottle-fill {
+  position: absolute;
+  left: -8px;
+  right: -8px;
+  bottom: -2px;
+  height: var(--fill);
+  min-height: 0;
+  background: linear-gradient(180deg, var(--fill-top), var(--fill-bottom));
+  transition: height 0.45s ease, background 0.3s ease;
+  z-index: 1;
+}
+.bottle-fill::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  right: -16px;
+  top: -7px;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.18) 38%, transparent 70%);
+  border-radius: 50%;
+  animation: wave 2.4s ease-in-out infinite;
+}
+.bottle-glass {
+  position: absolute;
+  inset: 8px 13px;
+  border-radius: 16px 16px 20px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.11), transparent 34%, rgba(255, 255, 255, 0.06));
+  z-index: 2;
+  pointer-events: none;
+}
+.bottle-neck {
+  position: absolute;
+  top: 4px;
+  left: 26px;
+  width: 20px;
+  height: 10px;
+  border-radius: 6px 6px 3px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 3;
+  pointer-events: none;
+}
+.bottle-time {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1px;
+  line-height: 1;
+  position: relative;
+  z-index: 4;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+}
+.bottle-label {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+  line-height: 1;
+  position: relative;
+  z-index: 4;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.status-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6c7380;
+}
+.status-dot.running { background: #88c0d0; animation: pulse 1.5s ease-in-out infinite; }
+.status-dot.break { background: #a3be8c; animation: pulse 2s ease-in-out infinite; }
+.status-dot.paused, .status-dot.break-paused { background: #d08770; }
+.status-dot.idle { background: #6c7380; }
+.status-dot.break-ready { background: #a3be8c; opacity: 0.5; }
+.status-dot.snoozed { background: #d08770; animation: pulse 2s ease-in-out infinite; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+@keyframes wave {
+  0%, 100% { transform: translateX(-4px) scaleX(1.05); }
+  50% { transform: translateX(4px) scaleX(0.95); }
+}

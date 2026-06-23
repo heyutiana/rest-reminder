@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+Thumbs.db
+
+# 运行时生成的本地数据（含加密 API Key，不应提交）
+ai-key.enc
+ai-settings.json
+window-position.json
+floating-position.json
