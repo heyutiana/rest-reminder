@@ -266,7 +266,11 @@ window.RestReminder.todos = (function () {
     text = String(text || '').trim();
     if (!text) return false;
     var found = findTodo(parentId);
-    if (!found || !found.todo.children) return false;
+    if (!found) return false;
+    if (!Array.isArray(found.todo.children)) {
+      found.todo.children = [];
+      found.todo.expanded = true;
+    }
     found.todo.children.push({
       id: createId(),
       text: text,
@@ -579,21 +583,22 @@ window.RestReminder.todos = (function () {
           return a.createdAt - b.createdAt;
         });
         for (var j = 0; j < children.length; j++) list.appendChild(renderTodoItem(children[j], todo));
-        if (!isTodoDone(todo)) {
-          var addRow = document.createElement('div');
-          addRow.className = 'todo-item todo-add-child';
-          var addBtn = document.createElement('button');
-          addBtn.className = 'btn btn-ghost btn-add-child';
-          addBtn.textContent = '+ 添加子任务';
-          (function (tid) { addBtn.addEventListener('click', function () {
-            showPrompt('添加子任务', '', function (val) {
-              if (val !== null && val !== '') addChildTodo(tid, val);
-              removePrompt();
-            });
-          }); })(todo.id);
-          addRow.appendChild(addBtn);
-          list.appendChild(addRow);
-        }
+      }
+      if (!isTodoDone(todo)) {
+        var addRow = document.createElement('div');
+        addRow.className = 'todo-item todo-add-child';
+        if (!hasChildren(todo)) addRow.classList.add('todo-add-child-flat');
+        var addBtn = document.createElement('button');
+        addBtn.className = 'btn btn-ghost btn-add-child';
+        addBtn.textContent = hasChildren(todo) ? '+ 添加子任务' : '+ 添加子任务';
+        (function (tid) { addBtn.addEventListener('click', function () {
+          showPrompt('添加子任务', '', function (val) {
+            if (val !== null && val !== '') addChildTodo(tid, val);
+            removePrompt();
+          });
+        }); })(todo.id);
+        addRow.appendChild(addBtn);
+        list.appendChild(addRow);
       }
     }
     if (ns.stats && ns.stats.renderStatsPage) ns.stats.renderStatsPage();
